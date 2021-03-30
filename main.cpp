@@ -184,10 +184,10 @@ struct QueueLinkedList{
                 		cout << "SKIP " << NAMA_PENERIMA_VAKSIN << endl; // Contoh output aja
                 		// Panggil Fungsi Untuk Memindahkan Pasien Berdasarkan Nama dari Ruang Antre ke Ruang Tunggu (Parameter : NAMA_PENERIMA_VAKSIN)
             		}
-        	else if(PERINTAH == "STATUS"){
+			}
+			else if(PERINTAH == "STATUS"){
             		cout << "STATUS ANTRE DAN TUNGGU" << endl; // Contoh output aja
             		// Panggil Fungsi Untuk Mencetak/Melihat Pasien di Ruang Antre dan Ruang Tunggu
-        	}
         	}
         	else{
             		// Exit Saat perintah tidak ada yang cocok
