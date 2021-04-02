@@ -96,6 +96,59 @@ struct QueueLinkedList{
 		}
 	}
 	
+	void dequeue_nama(string nama){
+        int toogle = 0;
+        Node *tmp = front;
+        Node *prev = NULL;
+        Node *after;
+        while(tmp != NULL || toogle == 0){
+            // kondisi while dengan OR toogle agar jika linked sudah dihapus tidak perlu mencari sampai akhir
+            if(tmp->name == nama){
+                if(prev == NULL){
+                    if(front == rear){
+						delete tmp;
+						front = rear = NULL;
+					}
+					else{
+						front->next->prev = NULL;
+						front = tmp->next;
+						delete tmp;
+					}
+					size--;
+					break;
+                }
+                else if(tmp == rear){
+                    if(rear == front){
+						delete tmp;
+						front = rear = NULL;
+					}
+					else{
+						rear->prev->next = NULL;
+						rear = tmp->prev;
+						delete tmp;
+					}
+					size--;
+					break;
+                }
+                else{
+                    prev->next = tmp->next;
+                    after->prev = tmp->prev;
+                    delete tmp;
+                    size--;
+                    break;
+                }
+            toogle = 1;
+            }
+            else if(tmp->next == NULL){
+                cout << "gaada" << endl;
+                break;
+            }
+        prev = tmp;
+        tmp = tmp->next;
+        after = tmp->next;
+        }
+	}
+
 	void skip(){
 		
 	}
@@ -200,7 +253,8 @@ struct QueueLinkedList{
                 	NAMA_PENERIMA_VAKSIN = inputPerKata[1];
                 	cout << "SELESAI " << NAMA_PENERIMA_VAKSIN << endl; // Contoh output aja
                 	// Panggil Fungsi Untuk Menghapus (Selesai Vaksin) dengan Nama Orang Dari Antrian (Parameter : NAMA_PENERIMA_VAKSIN)
-            	}
+					dequeue_nama(NAMA_PENERIMA_VAKSIN);
+				}
         }
         else if(PERINTAH == "SKIP"){
             	if(inputPerKata[1] == "KOSONG"){
@@ -214,7 +268,7 @@ struct QueueLinkedList{
             	}
 		}
 		else if(PERINTAH == "STATUS"){
-            	// cout << "STATUS ANTRE DAN TUNGGU" << endl; // Contoh output aja
+            	cout << "STATUS ANTRE DAN TUNGGU" << endl; // Contoh output aja
             	// Panggil Fungsi Untuk Mencetak/Melihat Pasien di Ruang Antre dan Ruang Tunggu
 				print();
 				print1();
