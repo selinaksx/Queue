@@ -12,9 +12,8 @@ struct Node{
 };
 
 struct QueueLinkedList{
-    int pasienLansia = 0;
-    int pasienBukanLansia = 0;
-    int totalPasien = pasienLansia + pasienBukanLansia;
+	int value, x;
+	int count = 0;
 	int size = 0;
 	Node *front, *front1, *rear, *rear1, *head, *head1;
 	
@@ -22,14 +21,10 @@ struct QueueLinkedList{
 		front = front1 = rear = rear1 = head = head1 = NULL;
 	}
 	
-	bool is_empty_RuangAntre(){
+	bool is_empty(){
 		return (front == NULL && rear == NULL);
 	}
 	
-	bool is_empty_RuangTunggu(){
-		return (front1 == NULL && rear1 == NULL);
-	}
-
 	void make_empty(){
 		Node *p = front;
         for(int x; size != 0; x++){
@@ -40,208 +35,73 @@ struct QueueLinkedList{
         front = rear = NULL;
 	}
 	
-	void set_size_RuangAntre(int x){
+	void set_size(int x){
 		size = x;
 	}
 	
-	int get_size_RuangAntre(){
+	int get_size(){
 		return size;
 	}
 	
-    void pasien_Increment(string status){
-        if(status == "LANSIA"){
-            pasienLansia++;
-        }
-        else{
-            pasienBukanLansia++;
-        }
-        totalPasien = pasienLansia + pasienBukanLansia;
-    }
-
-    void pasien_Decrement(string status){
-        if(status == "LANSIA"){
-            pasienLansia--;
-        }
-        else{
-            pasienBukanLansia--;
-        }
-        totalPasien = pasienLansia + pasienBukanLansia;
-    }
-
-    int get_totalPasien(){
-        return totalPasien;
-    }
-
-    int get_PasienLansia(){
-        return pasienLansia;
-    }
-
-    int get_PasienBukanLansia(){
-        return pasienBukanLansia;
-    }
-
-	void enqueue_RuangAntre(string nama, int umur, int tensi, string status, int priority){
+	void enqueue(string x, int y, int z, string status){
 		Node *tmp = new Node;
-		Node *helper = front;
-		tmp->name = nama;
-		tmp->age = umur;
-		tmp->bp = tensi;
+		tmp->name = x;
+		tmp->age = y;
+		tmp->bp = z;
 		tmp->status = status;
 		tmp->next = NULL;
 		tmp->prev = NULL;
-        if(is_empty_RuangAntre()){
-            front = tmp;
-            rear = tmp;
-            pasien_Increment(status);
-        }
-        else if(totalPasien >= size){
-            if(priority == 1 && pasienLansia != get_size_RuangAntre()){
-                while(helper != NULL){
-                    if(helper->status == "BUKAN_LANSIA"){
-                        tmp->next = helper->next;
-                        helper->next->prev = tmp;
-                        enqueue_RuangTunggu(helper->name, helper->age, helper->bp, helper->status, 0);
-                        pasien_Increment(status);
-                        break;
-                    }
-                    helper = helper->prev;
-                }  
-            }
-            else{
-                enqueue_RuangTunggu(nama, umur, tensi, status, priority);
-            }
-        }
-        else if(priority == 1){
-            if(helper->status == "BUKAN_LANSIA"){
-                helper->next = tmp;
-                tmp->prev = helper;
-                front = tmp;
-                pasien_Increment(status);
-            }
-            else{
-                while(helper != NULL){
-                    if(helper->status == "BUKAN_LANSIA"){
-                        tmp->next = helper->next;
-                        helper->next->prev = tmp;
-                        helper->next = tmp;
-                        tmp->prev = helper;
-                        pasien_Increment(status);
-                        break;
-                    }
-                    else if(helper->prev == NULL){
-                        tmp->next = helper;
-                        helper->prev = tmp;
-                        rear = tmp;
-                        pasien_Increment(status);
-                        break;
-                    }
-                    helper = helper->prev;
-                }
-            }
-        }
-        else{
-            tmp->next = rear;
-            rear->prev = tmp;
-            rear = tmp;
-            pasien_Increment(status);
-        }
+		if(is_empty()){
+			front = tmp;
+			rear = tmp;
+		} else if(count >= size) {
+			if(front1 == NULL){
+				front1 = rear1 = tmp;
+			} else {
+				// rear1->next = tmp;
+				// rear1 = tmp;
+				tmp->next = front1;
+				front1->prev = tmp;
+			}
+		} else {
+            tmp->next = front;
+            front->prev = tmp;
+		}
+		front = tmp;
+		count++;
 	}
 
-	void enqueue_RuangTunggu(string nama, int umur, int tensi, string status, int priority){
-		Node *tmp = new Node;
-		Node *helper = front1;
-		tmp->name = nama;
-		tmp->age = umur;
-		tmp->bp = tensi;
-		tmp->status = status;
-		tmp->next = NULL;
-		tmp->prev = NULL;
-        if(is_empty_RuangTunggu()){
-            front1 = tmp;
-            rear1 = tmp;
-        }
-        else if(priority == 1){
-            if(helper->status == "BUKAN_LANSIA"){
-                helper->next = tmp;
-                tmp->prev = helper;
-                front1 = tmp;
-            }
-            else{
-                while(helper != NULL){
-                    if(helper->status == "BUKAN_LANSIA"){
-                        tmp->next = helper->next;
-                        helper->next->prev = tmp;
-                        helper->next = tmp;
-                        tmp->prev = helper;
-                        break;
-                    }
-                    else if(helper->prev == NULL){
-                        tmp->next = helper;
-                        helper->prev = tmp;
-                        rear1 = tmp;
-                        break;
-                    }
-                    helper = helper->prev;
-                }
-            }
-        }
-        else{
-            tmp->next = rear1;
-            rear1->prev = tmp;
-            rear1 = tmp;
-        }
-        pasien_Increment(status);
+	void printAntre(string nama, string status){
+		cout << "ANTRE " << nama << " " << status;
+		if(count > size){
+			cout << " TUNGGU " << nama;
+		}
+		cout << endl;
 	}
+
+    void printTolak(string nama, string status){
+        cout << "TOLAK " << nama << " " << status << " TENSI_TIDAKBOLEH_DIVAKSIN" << endl;
+    }
 
 	void dequeue(){
-		if(totalPasien <= size){
-			Node *tmp = front;
-			tmp = tmp->next;
-			delete tmp;
-		} 
-		else if(totalPasien > size){
-			Node *tmp = front;
-			tmp = tmp->next;
-			delete tmp;
-			
-			if(size == 2){
-				Node *tmp  = front1;
-				Node *done = front1;
-				tmp = front1->next;
-				front = rear;
-				front->next = tmp;
-				rear = done;
-				rear->next = NULL;
-			} else if(size > 2){
-				Node *tmp = front1;
-				tmp = tmp->next;
-				rear = front->next;
-				rear->next = tmp;
-				rear = tmp;
-				rear->next = NULL;
-			}
+		Node *tmp = rear;
+		if(rear == front){
+            delete tmp;
+            front = rear = NULL;
 		}
-		totalPasien--;
+		else{
+                rear->prev->next = NULL;
+                rear = tmp->prev;
+                delete tmp;
+		}
 	}
 	
 	void skip(){
 		
 	}
 
-	void print_Antre(string nama, string status){
-		cout << "ANTRE " << nama << " " << status;
-		if(totalPasien > size){
-			cout << " TUNGGU " << nama;
-		}
-		cout << endl;
-	}
-
-    void print_Tolak(string nama, string status){
-        cout << "TOLAK " << nama << " " << status << " TENSI_TIDAKBOLEH_DIVAKSIN" << endl;
-    }
-
-	void print_DaftarAntre(){
-		Node *tmp = front;
+	void print(){
+		Node *tmp = rear;
 		cout << "DAFTAR_ANTRE ";
 		while(tmp != NULL){
 			cout << tmp->name << "^" << tmp->status << "^" << tmp->bp << " ";
@@ -250,8 +110,8 @@ struct QueueLinkedList{
 		cout<<endl;
  	}
 
- 	void print_DaftarTunggu(){
-		Node *tmp = front1;
+ 	void print1(){
+		Node *tmp = rear1;
 		cout << "DAFTAR_TUNGGU ";
 		while(tmp != NULL){
 			cout << tmp->name << "^" << tmp->status << "^" << tmp->bp << " ";
@@ -265,8 +125,7 @@ struct QueueLinkedList{
         int USIA; // Variabel untuk dipass melalui parameter fungsi
         int TENSI; // Variabel untuk dipass melalui parameter fungsi
         int N; // Variabel untuk dipass melalui parameter fungsi
-        int priority;
-		string inputPerKata[4]; // Array yang menyimpan setiap kata (contoh -> array[0]: BARU, array[1]: Yana, dan seterusnya)
+        string inputPerKata[4]; // Array yang menyimpan setiap kata (contoh -> array[0]: BARU, array[1]: Yana, dan seterusnya)
         for(int zyx = 0; zyx < 4; zyx++){ // Inisialisasi array default berisi "Kosong"
             	inputPerKata[zyx] = "KOSONG";
         }
@@ -295,16 +154,14 @@ struct QueueLinkedList{
                 	// Perlu Pengecekan Tensi dan Umur lalu Panggil Fungsi Enqueue(NAMA_PENERIMA_VAKSIN, USIA, TENSI)
 					if(USIA>=60){
 						status = "LANSIA";
-						priority = 1;
 					} else{
 						status = "BUKAN_LANSIA";
-						priority = 0;
 					}	
 					if (TENSI < 180){
-						enqueue_RuangAntre(NAMA_PENERIMA_VAKSIN, USIA, TENSI, status, priority);
-						print_Antre(NAMA_PENERIMA_VAKSIN, status);
+						enqueue(NAMA_PENERIMA_VAKSIN, USIA, TENSI, status);
+						printAntre(NAMA_PENERIMA_VAKSIN, status);
 					} else {
-						print_Tolak(NAMA_PENERIMA_VAKSIN, status);			
+						printTolak(NAMA_PENERIMA_VAKSIN, status);			
 					}
             	}
         }
@@ -329,6 +186,9 @@ struct QueueLinkedList{
                 	N = stoi(inputPerKata[1]); // Casting String ke Integer (Butuh C++ Versi 11 atau Lebih)
                 	cout << "SELESAI " << N << " ORANG" << endl; // Contoh output aja
                 	// Panggil Fungsi Untuk Menghapus (Selesai Vaksin) N Orang Dari Antrian (Parameter : N)
+					for(int x = 0; x < N; x++){
+						dequeue();
+					}
             	}
         }
         else if(PERINTAH == "SELESAI_NAMA"){
@@ -356,12 +216,8 @@ struct QueueLinkedList{
 		else if(PERINTAH == "STATUS"){
             	// cout << "STATUS ANTRE DAN TUNGGU" << endl; // Contoh output aja
             	// Panggil Fungsi Untuk Mencetak/Melihat Pasien di Ruang Antre dan Ruang Tunggu
-				print_DaftarAntre();
-				print_DaftarTunggu();
-                cout << "\nPasien Lansia : " << get_PasienLansia();
-                cout << "\nPasien Non Lansia : " << get_PasienBukanLansia() << endl;
-                cout << "\nTotal Pasien : " << get_totalPasien() << endl;
-                cout << endl;
+				print();
+				print1();
         }
         else{
             	// Exit Saat perintah tidak ada yang cocok
@@ -376,7 +232,7 @@ int main(int argc, char** argv) {
 	// Perlu Inisiasilasi Awal Ukuran Ruang Antre Variabel (M) dengan Batas 1 =< M =< 1000
 	// cin >> ukuran;
 	// cin.ignore();
-	qll.set_size_RuangAntre(2);
+	qll.set_size(5);
 	qll.init();
 	int x = 0;
     	string inputs; // Variabel yang dimasukan user pertama kali (contoh: BARU Yana 55 22)
@@ -391,6 +247,6 @@ int main(int argc, char** argv) {
     	for(int xy = 0; xy < x; xy++){
         	qll.InputOutputHandler(inputFix[xy]);
     	}
-        // Perlu Penghapusan Object/Instance atau Membebaskan Memori
+    	// Perlu Penghapusan Object/Instance atau Membebaskan Memori
 	return 0;
 }
