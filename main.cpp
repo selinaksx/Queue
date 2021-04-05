@@ -1,12 +1,11 @@
 /*
-Kelas : Algoritma dan Struktur Data TKOM - B 
-Deskripsi : Tugas 1
-Origin : https://github.com/xjoliez/Queue
-Anggota Kelompok : 
-                    - Nisrina Fairuz Hafizhah Al Amin   (205150300111021)
-                    - Reyhan Naufal Hayyan              (185150307111017)
-                    - Selina Kusmiawati                 (185150301111005)
-
+Kelas            : Algoritma dan Struktur Data TKOM - B
+Deskripsi        : Tugas 1
+Origin           : https://github.com/xjoliez/Queue
+Anggota Kelompok :
+    * Reyhan Naufal Hayyan              (185150307111017)
+    * Selina Kusmiawati                 (185150301111005)
+    * Nisrina Fairuz Hafizhah Al Amin   (205150300111021)
 **NOTE** : Program Harus dijalankan dengan C++ Versi >= 11 karena menggunakan fungsi stoi.
 */
 
@@ -16,11 +15,11 @@ using namespace std;
 
 struct Node{
 	string name;
-	string status; 
+	string status;
 	int age;
 	int bp; // bp = Blood Pressure
 	Node *next, *prev;
-	
+
 };
 
 struct QueueLinkedList{
@@ -44,7 +43,7 @@ struct QueueLinkedList{
 	bool is_empty_RuangAntre(){
 		return (front == NULL && rear == NULL);
 	}
-	
+
 	bool is_empty_RuangTunggu(){
 		return (front1 == NULL && rear1 == NULL);
 	}
@@ -76,7 +75,7 @@ struct QueueLinkedList{
             exit(0);
         }
 	}
-	
+
 	int get_size_RuangAntre(){
 		return size;
 	}
@@ -144,7 +143,7 @@ struct QueueLinkedList{
     int get_PasienBukanLansia(){
         return pasienBukanLansia;
     }
-    
+
     bool verify_totalPasien(){
         return pasienLansia + pasienBukanLansia == totalPasienAntre + totalPasienTunggu;
     }
@@ -162,9 +161,9 @@ struct QueueLinkedList{
                 helper2 = helper2->prev;
             }
         }
-        return false; 
-    } 
-    
+        return false;
+    }
+
 	void enqueue_RuangAntre(string nama, int umur, int tensi, string status, int priority){
         Node *tmp = new Node;
 		Node *helper = rear;
@@ -188,7 +187,7 @@ struct QueueLinkedList{
                 }
                 else{
                     pasien_Increment(status,"ruangTunggu");
-                    enqueue_RuangTunggu(nama, umur, tensi, status, 0); 
+                    enqueue_RuangTunggu(nama, umur, tensi, status, 0);
                 }
             }
             else{
@@ -200,7 +199,7 @@ struct QueueLinkedList{
                         front = tmp;
                         helper2->next = tmp;
                         pasien_Increment(status,"ruangTunggu");
-                        enqueue_RuangTunggu(helper->name, helper->age, helper->bp, helper->status, 1); 
+                        enqueue_RuangTunggu(helper->name, helper->age, helper->bp, helper->status, 1);
                         cout << " TUNGGU " << helper->name << endl;
                         // Ganti Belakang
                         helper->next->prev = NULL;
@@ -216,7 +215,7 @@ struct QueueLinkedList{
                                 helper2->next = tmp;
                                 tmp->prev = helper2;
                                 pasien_Increment(status,"ruangTunggu");
-                                enqueue_RuangTunggu(helper->name, helper->age, helper->bp, helper->status, 1); 
+                                enqueue_RuangTunggu(helper->name, helper->age, helper->bp, helper->status, 1);
                                 cout << " TUNGGU " << helper->name << endl;
                                 // Ganti Belakang
                                 helper->next->prev = NULL;
@@ -280,7 +279,7 @@ struct QueueLinkedList{
             rear = tmp;
             pasien_Increment(status,"ruangAntre");
         }
-	}        
+	}
 
 	void enqueue_RuangTunggu(string nama, int umur, int tensi, string status, int priority){
         Node *tmp = new Node;
@@ -330,7 +329,7 @@ struct QueueLinkedList{
     void dequeue(int N){
         if(N <= totalPasien){
             // Saat N tidak melebihi totalPasien (Ruang Antre + Ruang Tunggu)
-            cout << "SELESAI_VAKSIN ";   
+            cout << "SELESAI_VAKSIN ";
             while(N != 0){
                 Node *tmp = front;
                 Node *helper = front1;
@@ -353,7 +352,7 @@ struct QueueLinkedList{
         else{
             // N terlalu banyak melebihi totalPasien
             exit(0);
-        }    
+        }
     }
 
     void dequeue_nama(string nama){
@@ -395,7 +394,7 @@ struct QueueLinkedList{
                 }
             }
             else if(tmp->prev == NULL){
-                // Tidak ada nama pasien yang dimaksud pada Ruang Antre 
+                // Tidak ada nama pasien yang dimaksud pada Ruang Antre
                 break;
             }
             next = tmp;
@@ -527,8 +526,8 @@ struct QueueLinkedList{
                     enqueue_RuangTunggu(namaRef[xy], ageRef[xy], bpRef[xy], statusRef[xy], 1);
                 }
                 else{
-                    pasien_Increment(statusRef[xy],"ruangTunggu"); 
-                    enqueue_RuangTunggu(namaRef[xy], ageRef[xy], bpRef[xy], statusRef[xy], 0);                  
+                    pasien_Increment(statusRef[xy],"ruangTunggu");
+                    enqueue_RuangTunggu(namaRef[xy], ageRef[xy], bpRef[xy], statusRef[xy], 0);
                 }
             }
             cout << "SUKSES UBAH " << oldSize << " " << N << endl;
@@ -542,7 +541,13 @@ struct QueueLinkedList{
                 cout << endl;
             }
             else{
-                cout << "ANTRE " << nama << " " << status;
+                if(is_full_RuangAntre()){
+                    cout << "ANTRE " << nama << " " << status;
+                }
+                else{
+                    cout << "ANTRE " << nama << " " << status;
+                    cout << endl;
+                }
             }
         }
         else{
@@ -628,12 +633,12 @@ struct QueueLinkedList{
 					} else{
 						status = "BUKAN_LANSIA";
 						priority = 0;
-					}	
+					}
 					if (TENSI < 180){
 						print_Antre(NAMA_PENERIMA_VAKSIN, status);
                         enqueue_RuangAntre(NAMA_PENERIMA_VAKSIN, USIA, TENSI, status, priority);
 					} else {
-						print_Tolak(NAMA_PENERIMA_VAKSIN, status);			
+						print_Tolak(NAMA_PENERIMA_VAKSIN, status);
 					}
             	}
         }
@@ -690,7 +695,7 @@ struct QueueLinkedList{
             	if(is_exist_pasien_RuangAntre(NAMA_PENERIMA_VAKSIN)){  // Skip Pasien Hanya Saat Pasien ada didalam Ruang Antre
                     // Panggil Fungsi Skip Dengan Parameter Pasien Yang Ingin di Skip (Pindah ke Ruang Tunggu)
                     skip(NAMA_PENERIMA_VAKSIN);
-                    cout << "SKIP SUKSES" << endl; 
+                    cout << "SKIP SUKSES" << endl;
                 }
                 else{
                     cout << "SKIP GAGAL" << endl;
@@ -718,9 +723,9 @@ int main(int argc, char** argv) {
 	qll.init();
 	int x = 0;
     // Input Yang Dimasukan User Pertama Kali (contoh: BARU Faridh 55 22)
-    string inputs; 
+    string inputs;
     // Menyimpan input pada Array Agar Dapat Input Secara Banyak Lalu Output (Testcase sampai 10000)
-    string inputFix[10000]; 
+    string inputFix[10000];
     while(getline(cin,inputs)){
         inputFix[x] = inputs;
         x++;
