@@ -1,11 +1,11 @@
 /*
 Kelas : Algoritma dan Struktur Data TKOM - B 
 Deskripsi : Tugas 1
+Origin : https://github.com/xjoliez/Queue
 Anggota Kelompok : 
                     - Nisrina Fairuz Hafizhah Al Amin   (205150300111021)
                     - Reyhan Naufal Hayyan              (185150307111017)
                     - Selina Kusmiawati                 (185150301111005)
-Origin : https://github.com/xjoliez/Queue
 
 **NOTE** : Program Harus dijalankan dengan C++ Versi >= 11 karena menggunakan fungsi stoi.
 */
